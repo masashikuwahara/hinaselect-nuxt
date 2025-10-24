@@ -36,8 +36,10 @@
 <script setup>
 import { useQuestionStore } from '~/stores/question'
 import questions from '~/data/questions_balanced.json'
+import { useRouter } from 'vue-router'
 
 const store = useQuestionStore()
+const router = useRouter()
 
 onMounted(() => {
   if (!store.questions.length) {
@@ -46,16 +48,21 @@ onMounted(() => {
 })
 
 function handleAnswer(category) {
-  store.answer(category)
-  if (store.isFinished) {
-    router.push('/result')
+  try {
+    const isLast = store.currentIndex === store.questions.length - 1
+
+    store.answer(category)
+
+    if (isLast) {
+      router.push('/result')
+    }
+  } catch (e) {
+    console.error('handleAnswer error:', e)
   }
 }
-
 </script>
 
 <style scoped>
-/* フェード＋ふわっと */
 .fade-question-enter-active,
 .fade-question-leave-active {
   transition: all 0.5s ease;
