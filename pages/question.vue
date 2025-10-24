@@ -1,62 +1,71 @@
 <template>
-  <div class="p-4 sm:p-6 max-w-md sm:max-w-xl mx-auto">
-    <h2 class="text-xl sm:text-2xl font-bold text-center mb-6">
-      質問 {{ currentIndex + 1 }} / {{ questions.length }}
+  <div class="p-6 max-w-xl mx-auto text-center">
+    <h2 v-if="store.questions.length" class="text-xl font-bold mb-6">
+      質問 {{ store.currentIndex + 1 }} / {{ store.questions.length }}
     </h2>
 
-    <transition name="fade" mode="out-in">
-      <div :key="currentIndex" class="bg-white/90 p-4 sm:p-6 rounded-xl shadow-lg text-center">
-        <p class="text-base sm:text-lg font-semibold mb-4">
-          {{ currentQuestion.text }}
+    <transition name="fade-question" mode="out-in">
+      <div
+        v-if="store.currentQuestion"
+        :key="store.currentIndex"
+        class="bg-white p-6 rounded-2xl shadow-xl transition-all duration-500 ease-out"
+      >
+        <p class="text-lg font-semibold mb-6">
+          {{ store.currentQuestion.text }}
         </p>
 
         <div class="space-y-3">
           <button
-            v-for="(option, index) in currentQuestion.options"
+            v-for="(option, index) in store.currentQuestion.options"
             :key="index"
-            @click="answer(option.category)"
-            class="block w-full bg-[#7cc7e8] hover:bg-[#5eb8da] text-white py-3 rounded-xl transition text-base sm:text-lg font-semibold"
+            @click="handleAnswer(option.category)"
+            class="block w-full bg-blue-500 hover:bg-blue-600 text-white py-3 rounded-xl text-lg transition transform hover:scale-105"
           >
             {{ option.text }}
           </button>
         </div>
+      </div>
+
+      <div v-else key="loading" class="text-gray-500 mt-6">
+        質問を読み込んでいます…
       </div>
     </transition>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
-import { useRouter } from 'vue-router'
+import { useQuestionStore } from '~/stores/question'
+import questions from '~/data/questions_balanced.json'
 
-import questions from '../data/questions_balanced.json'
+const store = useQuestionStore()
 
-const scores = ref({})
-const currentIndex = ref(0)
-const router = useRouter()
+onMounted(() => {
+  if (!store.questions.length) {
+    store.setQuestions(questions)
+  }
+})
 
-const currentQuestion = computed(() => questions[currentIndex.value])
-
-function answer(category) {
-  if (!scores.value[category]) scores.value[category] = 0
-  scores.value[category] += 1
-
-  if (currentIndex.value < questions.length - 1) {
-    currentIndex.value++
-  } else {
-    router.push({
-      path: '/result',
-      query: { scores: JSON.stringify(scores.value) }
-    })
+function handleAnswer(category) {
+  store.answer(category)
+  if (store.isFinished) {
+    router.push('/result')
   }
 }
+
 </script>
 
 <style scoped>
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 0.4s;
+/* フェード＋ふわっと */
+.fade-question-enter-active,
+.fade-question-leave-active {
+  transition: all 0.5s ease;
 }
-.fade-enter-from, .fade-leave-to {
+.fade-question-enter-from {
   opacity: 0;
+  transform: translateY(20px) scale(0.98);
+}
+.fade-question-leave-to {
+  opacity: 0;
+  transform: translateY(-15px) scale(0.98);
 }
 </style>
