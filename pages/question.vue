@@ -41,26 +41,50 @@ import { useRouter } from 'vue-router'
 const store = useQuestionStore()
 const router = useRouter()
 
+// Fisher–Yates シャッフル
+function shuffle(array) {
+  let shuffled = [...array]
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+  }
+  return shuffled
+}
+
+// ✅ セッション中の重複防止
 onMounted(() => {
   if (!store.questions.length) {
-    store.setQuestions(questions)
+    const shuffled = shuffle(questions)
+
+    // すでに出題された質問があれば除外
+    const seen = new Set(store.answeredQuestions || [])
+    const filtered = shuffled.filter(q => !seen.has(q.text))
+
+    store.setQuestions(filtered)
   }
 })
 
 function handleAnswer(category) {
   try {
-    const isLast = store.currentIndex === store.questions.length - 1
+    const currentQ = store.currentQuestion
+    if (!currentQ) return
 
+    // ✅ 出題済みリストに追加
+    if (!store.answeredQuestions) store.answeredQuestions = []
+    store.answeredQuestions.push(currentQ.text)
+
+    const isLast = store.currentIndex === store.questions.length - 1
     store.answer(category)
 
     if (isLast) {
-      router.push('/result')
+      setTimeout(() => router.push('/result'), 400)
     }
   } catch (e) {
     console.error('handleAnswer error:', e)
   }
 }
 </script>
+
 
 <style scoped>
 .fade-question-enter-active,
