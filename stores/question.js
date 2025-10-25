@@ -5,6 +5,7 @@ export const useQuestionStore = defineStore('question', {
     currentIndex: 0,
     scores: {},
     questions: [],
+    answeredQuestions: [],
     isFinished: false,
   }),
 
