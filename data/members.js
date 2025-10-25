@@ -8,7 +8,8 @@ export const members = [
       "バラエティ": 0.154
     },
     "image": "/images/kanemura.jpg",
-    "description": "モデル活動や写真撮影にも積極的。撮影美術に敏感な繊細さと、やわらかな感性を持つ。"
+    "description": "モデル活動や写真撮影にも積極的。撮影美術に敏感な繊細さと、やわらかな感性を持つ。",
+    "link": "https://kasumizaka46.com/members/13"
   },
   {
     "name": "河田陽菜",
@@ -28,17 +29,8 @@ export const members = [
       "知的・しっかり者": 0.2
     },
     "image": "/images/nao.jpg",
-    "description": "ニックネーム「こさかな」。安心感のある存在で、同期からも「いれば大丈夫！」と信頼されている。"
-  },
-  {
-    "name": "富田鈴花",
-    "categories": {
-      "バラエティ": 0.5,
-      "歌唱力が高い": 0.35,
-      "スポーツ・アクティブ": 0.15
-    },
-    "image": "/images/suzuka.jpg",
-    "description": "歌や楽器（ギター、ベース、ピアノ）のマルチな音楽スキルが抜群 。負け癖が強い。"
+    "description": "ニックネーム「こさかな」。安心感のある存在で、同期からも「いれば大丈夫！」と信頼されている。",
+    "link": "https://kasumizaka46.com/members/15"
   },
   {
     "name": "松田好花",
@@ -255,7 +247,7 @@ export const members = [
       "ぶりっ子": 0.2
     },
     "image": "/images/yuu.jpg",
-    "description": "萌え声を持つ薙刀麻雀少女。"
+    "description": "奇跡の萌え声を持つ薙刀麻雀少女。"
   },
   {
     "name": "下田衣珠季",
@@ -294,7 +286,7 @@ export const members = [
       "王道アイドル": 0.1
     },
     "image": "/images/sakura.jpg",
-    "description": "料理が得意なマイペース"
+    "description": "料理が得意なデストロイヤー桜"
   }
 ];
 
